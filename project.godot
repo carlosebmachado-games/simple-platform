@@ -48,6 +48,10 @@ jump={
  ]
 }
 
+[physics]
+
+2d/default_gravity=1800
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
