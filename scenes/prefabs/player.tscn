@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/player/player_walk_04.png" type="Texture" id=1]
 [ext_resource path="res://assets/player/player_walk_06.png" type="Texture" id=2]
@@ -30,7 +30,12 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 28.4351, 58.6647 )
 
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 2.24333
+height = 50.095
+
 [node name="player" type="KinematicBody2D"]
+collision_mask = 0
 script = ExtResource( 8 )
 
 [node name="sprite" type="AnimatedSprite" parent="."]
@@ -42,3 +47,13 @@ playing = true
 
 [node name="shape" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
+
+[node name="feet" type="Area2D" parent="."]
+collision_layer = 1024
+collision_mask = 8192
+
+[node name="shape" type="CollisionShape2D" parent="feet"]
+position = Vector2( 0, 58 )
+rotation = 1.5708
+shape = SubResource( 3 )
+[connection signal="body_entered" from="feet" to="." method="_on_feet_body_entered"]

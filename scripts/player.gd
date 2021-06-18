@@ -48,3 +48,6 @@ func _process(delta):
 		sprite.set_flip_h(false)
 	elif walking_left:
 		sprite.set_flip_h(true)
+
+func _on_feet_body_entered(body):
+	print('bateu')
