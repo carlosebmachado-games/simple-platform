@@ -27,7 +27,7 @@ func _physics_process(delta):
 	velocity = move_and_slide_with_snap(velocity, Vector2.DOWN, Vector2.UP)
 	
 	if is_on_floor() and Input.is_action_just_pressed("jump"):
-		velocity.y = -JUMP_SPEED
+		jump()
 	
 	walking_right = false
 	walking_left = false
@@ -49,5 +49,12 @@ func _process(delta):
 	elif walking_left:
 		sprite.set_flip_h(true)
 
+func jump():
+	velocity.y = -JUMP_SPEED
+
 func _on_feet_body_entered(body):
-	print('bateu')
+	jump()
+	body.smash()
+
+func _on_body_body_entered(body):
+	print("moreu")
