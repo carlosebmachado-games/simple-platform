@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/tileset/spritesheet_ground.png" type="Texture" id=1]
+[ext_resource path="res://scripts/move_platform.gd" type="Script" id=2]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -14,8 +15,11 @@ extents = Vector2( 64, 16 )
 curve = SubResource( 1 )
 
 [node name="follow" type="PathFollow2D" parent="."]
+rotate = false
 
 [node name="body" type="KinematicBody2D" parent="follow"]
+collision_layer = 0
+script = ExtResource( 2 )
 
 [node name="sprite_0" type="Sprite" parent="follow/body"]
 position = Vector2( -32, 0 )
