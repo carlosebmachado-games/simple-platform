@@ -61,16 +61,21 @@ func _process(delta):
 	elif walking_left:
 		sprite.set_flip_h(true)
 	
-	if position.y > 900: die()
+	if position.y > 800: die()
+
+func _on_head_body_entered(body):
+	if not alive: return
+	if body.has_method('destroy'):
+		body.destroy()
+
+func _on_body_body_entered(body):
+	if not alive: return
+	die()
 
 func _on_feet_body_entered(body):
 	if not alive: return
 	jump()
 	body.smash()
-
-func _on_body_body_entered(body):
-	if not alive: return
-	die()
 
 func jump():
 	velocity.y = -JUMP_SPEED
@@ -78,6 +83,6 @@ func jump():
 func die():
 	if not alive: return
 	alive = false
-	get_node("shape").queue_free()
+	get_node("shape").set_deferred("disabled", true)
 	jump()
 	emit_signal("died")

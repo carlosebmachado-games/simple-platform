@@ -1,7 +1,7 @@
 extends Camera2D
 
-onready var left = get_node('left')
-onready var right = get_node('right')
+onready var left = get_tree().get_current_scene().get_node('left_limit')
+onready var right = get_tree().get_current_scene().get_node('right_limit')
 
 func _ready():
 	limit_left = left.position.x
