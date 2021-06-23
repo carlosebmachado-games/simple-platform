@@ -1,6 +1,10 @@
 extends KinematicBody2D
 
+signal died
+
 onready var sprite = get_node("sprite")
+
+var alive = true
 
 var walking_left = false
 var walking_right = false
@@ -16,17 +20,21 @@ onready var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _physics_process(delta):
 	var walk = WALK_FORCE * (Input.get_action_strength("move_right") - Input.get_action_strength("move_left"))
-	if abs(walk) < WALK_FORCE * 0.2:
-		velocity.x = move_toward(velocity.x, 0, STOP_FORCE * delta)
+	
+	if alive:
+		if abs(walk) < WALK_FORCE * 0.2:
+			velocity.x = move_toward(velocity.x, 0, STOP_FORCE * delta)
+		else:
+			velocity.x += walk * delta
+		velocity.x = clamp(velocity.x, -WALK_MAX_SPEED, WALK_MAX_SPEED)
 	else:
-		velocity.x += walk * delta
-	velocity.x = clamp(velocity.x, -WALK_MAX_SPEED, WALK_MAX_SPEED)
+		velocity.x = 0
 	
 	velocity.y += gravity * delta
 	
 	velocity = move_and_slide_with_snap(velocity, Vector2.DOWN, Vector2.UP)
 	
-	if is_on_floor() and Input.is_action_just_pressed("jump"):
+	if is_on_floor() and Input.is_action_just_pressed("jump") and alive:
 		jump()
 	
 	walking_right = false
@@ -37,6 +45,10 @@ func _physics_process(delta):
 		walking_left = true
 
 func _process(delta):
+	if not alive:
+		sprite.play('jump')
+		return
+	
 	if (walking_left or walking_right) and is_on_floor():
 		sprite.play('walking')
 	elif not is_on_floor():
@@ -48,13 +60,24 @@ func _process(delta):
 		sprite.set_flip_h(false)
 	elif walking_left:
 		sprite.set_flip_h(true)
-
-func jump():
-	velocity.y = -JUMP_SPEED
+	
+	if position.y > 900: die()
 
 func _on_feet_body_entered(body):
+	if not alive: return
 	jump()
 	body.smash()
 
 func _on_body_body_entered(body):
-	print("moreu")
+	if not alive: return
+	die()
+
+func jump():
+	velocity.y = -JUMP_SPEED
+
+func die():
+	if not alive: return
+	alive = false
+	get_node("shape").queue_free()
+	jump()
+	emit_signal("died")

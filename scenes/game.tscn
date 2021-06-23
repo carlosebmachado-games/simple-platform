@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/prefabs/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/tilemaps/ts_world.tres" type="TileSet" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/tileset/cloud3.png" type="Texture" id=6]
 [ext_resource path="res://scenes/prefabs/coin.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/prefabs/slime.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scripts/game.gd" type="Script" id=9]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -38,6 +39,7 @@ _data = {
 extents = Vector2( 256, 32 )
 
 [node name="game" type="Node2D"]
+script = ExtResource( 9 )
 
 [node name="parallax" type="ParallaxBackground" parent="."]
 
